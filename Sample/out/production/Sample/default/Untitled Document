@@ -1,0 +1,10 @@
+File argumentSystemFile = new File("default/system.dat");
+File argumentSystemFile = new File("default/transaction.dat");
+
+//checking whether the arguments exist
+logger.trace("checking whether the arguments exist");
+
+for (String Parameter : args)
+{
+            logger.info("The argument is : " + Parameter);
+}
