@@ -47,9 +47,11 @@ public class LinearArrayOperation
         String spaceDelimiter = " ";
         String colonDelimiter = ":";
         String dotDelimiter = ".";
+        String hashDelimiter = "#";
         logger.info("Delimiter used for segregating array values : [ " + commaDelimiter + " ] " );
         logger.info("Delimiter used for segregating key value pairs : [ " + colonDelimiter + " ] " );
         logger.info("Delimiter used for segregating variable name : [ " + dotDelimiter + " ] " );
+        logger.info("Delimiter used for comments : [ " + hashDelimiter + " ] " );
 
         //Checking whether argument is passed
         //Finding the number of arguments
@@ -164,10 +166,12 @@ public class LinearArrayOperation
         logger.info("File content before formatting.");
         while ((line = bufferedReader.readLine()) != null) {
             logger.info(" [ " + line + " ] ");
+
             line = line.trim();
             //deleting extra whitespaces and the spaces before and after ":" in system.dat
             line = line.replaceAll("\\s+", spaceDelimiter).replaceAll("\\s+" + colonDelimiter, colonDelimiter).replaceAll(colonDelimiter + "+\\s", colonDelimiter)+"\n";
             lines.add(line);
+
         }
         fileReader.close();
         bufferedReader.close();
@@ -246,6 +250,7 @@ public class LinearArrayOperation
             transactionFileLine = transactionFileLine.trim();
             //deleting extra whitespaces and the spaces before and after ":" in transaction.dat file
             transactionFileLine = transactionFileLine.replaceAll("\\s+", spaceDelimiter).replaceAll("\\s+" +colonDelimiter, colonDelimiter).replaceAll(colonDelimiter + "+\\s", colonDelimiter)+"\n";
+
             transactionFileLines.add(transactionFileLine);
         }
         transactionFileReader.close();
@@ -268,25 +273,104 @@ public class LinearArrayOperation
         Scanner transactionFile = new Scanner(argumentTransactionFile);
 
         String[] currentSystemFileVariable = new String[2];
+        String commentLine;
         HashMap<String, String> inputSystemFileVariables = new HashMap<String, String>();
         while(systemFile.hasNextLine())
         {
-            currentSystemFileVariable = systemFile.nextLine().split(colonDelimiter);
-            inputSystemFileVariables.put(currentSystemFileVariable[0], currentSystemFileVariable[1]);
+            if (!systemFile.nextLine().startsWith(hashDelimiter))
+            {
+                currentSystemFileVariable = systemFile.nextLine().split(colonDelimiter);
+                inputSystemFileVariables.put(currentSystemFileVariable[0], currentSystemFileVariable[1]);
+            }
 
         }
 
         //Collection level validation
+        //Checking whether key exist in collection
+        logger.trace("Checking whether key exist in collection..");
+        int collectionSize = inputSystemFileVariables.size();
+        int noKeys = 0;
+        if (collectionSize != noKeys)
+        {
+            logger.trace("The value are stored in collection");
+        }
+        else
+        {
+            logger.error("No valid values present in collection!!!");
+            System.exit(-3);
+        }
+        //The values stored in collection are...
+        logger.info("Line starts with [ " + hashDelimiter + " ] Hence it is considered comment. ");
+        logger.trace("The values stored in collection are...");
         for(Map.Entry mapElement : inputSystemFileVariables.entrySet())
         {
-            //Checking whether key is alpha numeric
             String collectionKey = (String)mapElement.getKey();
+            String collectionValue = (String)mapElement.getValue();
+            logger.trace(" Key : [ " + collectionKey + " ] " + " Value : [ " + collectionValue + " ] ");
+            //Checking whether key exist
+
+
+            //Checking whether key is alpha numeric
             /*if(!StringUtils.isAlphanumeric(collectionKey))
             {
                 logger.info("Key is invalid, hence exiting!!!");
                 System.exit(-404);
             }*/
         }
+
+        //Checking whether minimum arrayCount is specified
+        logger.trace("Checking whether minimum arrayCount is specified...");
+        String minArrayCountString = inputSystemFileVariables.get("minArrayCount");
+        if(minArrayCountString == null)
+        {
+            logger.error("Minimum array count is not specified");
+            System.exit(-404);
+        }
+        logger.trace("Minimum arrayCount is specified");
+
+        //Checking whether maximum arrayCount is specified
+        logger.trace("Checking whether maximum arrayCount is specified...");
+        String maxArrayCountString = inputSystemFileVariables.get("maxArrayCount");
+        if(maxArrayCountString == null)
+        {
+            logger.error("Maximum array count is not specified");
+            System.exit(-404);
+        }
+        logger.trace("maximum arrayCount is specified");
+
+        //Checking whether arrayCount is specified
+        logger.trace("Checking whether arrayCount is specified...");
+        String arrayCountString = inputSystemFileVariables.get("arrayCount");
+        if(arrayCountString == null)
+        {
+            logger.error("Array count is not specified");
+            System.exit(-404);
+        }
+        logger.trace("ArrayCount is specified...");
+
+
+        //checking whether array count is within the min and max array count
+        logger.trace("Checking whether array count is within the min and max array count...");
+        int minArrayCount = Integer.parseInt(minArrayCountString);
+        int maxArrayCount = Integer.parseInt(maxArrayCountString);
+        int arrayCount = Integer.parseInt(arrayCountString);
+        logger.info("Minimum array count : [ " + minArrayCount + " ] ");
+        logger.info("Maximum array count : [ " + maxArrayCount + " ] ");
+        logger.info("Array count : [ " + arrayCount + " ] ");
+
+        //Checking whether array count is in specified range...
+        if(arrayCount < minArrayCount)
+        {
+            logger.error("Minimum "+minArrayCount+" arrays required");
+            System.exit(-404);
+        }
+        if(arrayCount > maxArrayCount)
+        {
+            logger.error("Maximum "+maxArrayCount+" arrays can only be specified");
+            System.exit(-404);
+        }
+        logger.trace("Array count is within the min and max array count.");
+
 
 
     }

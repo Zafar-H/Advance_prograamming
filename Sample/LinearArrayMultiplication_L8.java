@@ -297,8 +297,8 @@ public class LinearArrayMultiplication_L8
 
 
 
-        //checking whether minimum and arrayCount is specified
-        logger.trace("checking whether minimum and arrayCount is specified...");
+        //checking whether minimum arrayCount is specified
+        logger.trace("checking whether minimum arrayCount is specified...");
         String minArrayCountString = inputSystemFileVariables.get("minArrayCount");
         if(minArrayCountString == null)
         {
