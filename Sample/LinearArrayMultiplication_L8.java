@@ -42,8 +42,10 @@ public class LinearArrayMultiplication_L8
         String commaDelimiter = ",";
         String spaceDelimiter = " ";
         String colonDelimiter = ":";
+        String dotDelimiter = ".";
         logger.info("Delimiter used for segregating array values : [ " + commaDelimiter + " ] " );
         logger.info("Delimiter used for segregating key value pairs : [ " + colonDelimiter + " ] " );
+        logger.info("Delimiter used for segregating variable name : [ " + dotDelimiter + " ] " );
 
 
         //Checking the number of arguments
@@ -277,18 +279,21 @@ public class LinearArrayMultiplication_L8
 
         String[] currentTransactionFileVariable = new String[2];
         ArrayList<String> arrayValuesString=new ArrayList<String>();
+        String[] arrayNameVariable = new String[2];
         HashMap<String, String> inputTransactionFileVariables = new HashMap<String, String>();
         while(transactionFile.hasNextLine())
         {
             currentTransactionFileVariable = transactionFile.nextLine().split(colonDelimiter);
             inputTransactionFileVariables.put(currentTransactionFileVariable[0], currentTransactionFileVariable[1]);
-
-            //storing array values separately
-            if(currentTransactionFileVariable[0].startsWith("ELEMENTS"))
-            {
-                arrayValuesString.add(currentTransactionFileVariable[1]);
-            }
         }
+
+        for(Map.Entry mapElement : inputTransactionFileVariables.entrySet())
+        {
+
+        }
+
+
+
 
 
 
