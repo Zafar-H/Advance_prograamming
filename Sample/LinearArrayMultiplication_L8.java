@@ -418,19 +418,17 @@ public class LinearArrayMultiplication_L8
             arrayNameValueList.put(arrayName, array);
         }
 
-        //The length is computed dynamically
-        logger.trace("The length is computed dynamically...");
+        //The length of array is computed dynamically
+        logger.trace("The length of array is computed dynamically...");
         int[] arrayElementCount = new int[endCount];
-        for (int indexOfArray = startCount; indexOfArray < endCount; indexOfArray++)
+        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++)
         {
             arrayElementCount[indexOfArray] = endCount;
         }
-
-
         logger.trace("Checking if the arrays are of same length otherwise exit...");
         logger.trace("Checking if the initial position of the arrays are within the array size...");
         logger.trace("Checking if the end position of the arrays are within the array size...");
-        for (int indexOfArray = startCount; indexOfArray < endCount; indexOfArray++)
+        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++)
         {
             //checking if the arrays are of same length otherwise exit
             if ( indexOfArray != endCount-1)
@@ -457,7 +455,7 @@ public class LinearArrayMultiplication_L8
         logger.trace("Initial position of the arrays are within the array size");
         logger.trace("End position of the arrays are within the array size");
 
-        for (int indexOfArray = startCount; indexOfArray < endCount; indexOfArray++)
+        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++)
         {
             logger.info("ElementCount of Array " +(indexOfArray+1)+ " = [" + arrayElementCount[indexOfArray] + "]");
         }
