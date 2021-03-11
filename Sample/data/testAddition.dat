@@ -1,7 +1,8 @@
-arrayNames:firstArray,secondArray,thirdArray,fourthArray,fifthArray
+ArrayNames:firstArray,secondArray,thirdArray,fourthArray,fifthArray
 ELEMENTS.firstArray:1,2,4,5
 ELEMENTS.secondArray:-3,4,5,6
 ELEMENTS.thirdArray:2,3,4,5
 ELEMENTS.fourthArray:34,56,67,7
 ELEMENTS.fifthArray:1,2,3,4
 ArrayOperation:Addition
+#ccccc

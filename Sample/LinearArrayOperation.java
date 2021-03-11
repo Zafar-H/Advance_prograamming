@@ -3,6 +3,7 @@ import org.apache.log4j.Logger;
 //import org.apache.commons.lang.*;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class LinearArrayOperation
@@ -48,7 +49,10 @@ public class LinearArrayOperation
         String colonDelimiter = ":";
         String dotDelimiter = ".";
         String hashDelimiter = "#";
-        String keywordForArrayValues = "ELEMENTS";
+        String keywordForArrayValues = "ELEMENTS.";
+        String alphaNumericCondition = "^[a-zA-Z0-9]*$";
+        String alphaNumericCondition_2 = "^[a-zA-Z0-9" + keywordForArrayValues + "]*$";
+
         logger.info("Delimiter used for segregating array values : [ " + commaDelimiter + " ] " );
         logger.info("Delimiter used for segregating key value pairs : [ " + colonDelimiter + " ] " );
         logger.info("Delimiter used for segregating variable name : [ " + dotDelimiter + " ] " );
@@ -239,7 +243,7 @@ public class LinearArrayOperation
         }
 
         //The values stored in collection are...
-        logger.trace("Printing the key value pairs stored in collection if values exist...");
+        logger.trace("Printing the key value pairs stored in collection if values exist and keys are alpha numeric...");
         for(Map.Entry mapElement : inputSystemFileVariables.entrySet())
         {
             String collectionKey = (String)mapElement.getKey();
@@ -247,19 +251,18 @@ public class LinearArrayOperation
             if(!collectionValue.isEmpty())
             {
                 logger.trace(" Key : [ " + collectionKey + " ] " + " Value : [ " + collectionValue + " ] ");
+
+                //Checking whether keys are alpha numeric...
+                if (!collectionKey.matches(alphaNumericCondition)) {
+                    logger.info("Key : [ " + collectionKey + " ] is invalid, hence exiting!!!");
+                    System.exit(-404);
+                }
             }
             else
             {
                 logger.error("The value for key : [ " + collectionKey + " ] is not specified, hence exiting!!!");
                 System.exit(-3);
             }
-
-            //Checking whether key is alpha numeric
-            /*if(!StringUtils.isAlphanumeric(collectionKey))
-            {
-                logger.info("Key is invalid, hence exiting!!!");
-                System.exit(-404);
-            }*/
         }
 
         //Checking whether minimum arrayCount is specified
@@ -450,6 +453,7 @@ public class LinearArrayOperation
             //deleting extra whitespaces and the spaces before and after ":" in transaction.dat file
             transactionFileLine = transactionFileLine.replaceAll("\\s+", spaceDelimiter).replaceAll("\\s+" +colonDelimiter, colonDelimiter).replaceAll(colonDelimiter + "+\\s", colonDelimiter)+"\n";
             transactionFileLines.add(transactionFileLine);
+
         }
         transactionFileReader.close();
         transactionBufferedReader.close();
@@ -516,7 +520,7 @@ public class LinearArrayOperation
 
         //The values stored in collection are...
         int countOfKeywordForArrayValues = 0;
-        logger.trace("Printing the key value pairs stored in collection if values exist...");
+        logger.trace("Printing the key value pairs stored in collection if values exist and keys are alpha numeric...");
         for(Map.Entry mapElement : inputTransactionFileVariables.entrySet())
         {
             String collectionKey = (String)mapElement.getKey();
@@ -526,21 +530,28 @@ public class LinearArrayOperation
                 if (collectionKey.startsWith(keywordForArrayValues))
                 {
                     countOfKeywordForArrayValues = countOfKeywordForArrayValues + 1;
+                    //Checking whether key except the one starting with 'ELEMENTS' are alpha numeric
+                    if (!collectionKey.matches(alphaNumericCondition_2)) {
+                        logger.info("Key : [ " + collectionKey + " ] is invalid, hence exiting!!!");
+                        System.exit(-404);
+                    }
+                }
+                else
+                {
+                    //Checking whether key except the one starting with 'ELEMENTS' are alpha numeric
+                    if (!collectionKey.matches(alphaNumericCondition)) {
+                        logger.info("Key : [ " + collectionKey + " ] is invalid, hence exiting!!!");
+                        System.exit(-404);
+                    }
                 }
                 logger.trace(" Key : [ " + collectionKey + " ] " + " Value : [ " + collectionValue + " ] ");
+
             }
             else
             {
                 logger.error("The value for key : [ " + collectionKey + " ] is not specified, hence exiting!!!");
                 System.exit(-3);
             }
-
-            //Checking whether key is alpha numeric
-            /*if(!StringUtils.isAlphanumeric(collectionKey))
-            {
-                logger.info("Key is invalid, hence exiting!!!");
-                System.exit(-404);
-            }*/
         }
 
         //Checking whether array names are specified
@@ -625,13 +636,98 @@ public class LinearArrayOperation
 
         }
 
+        //Specifying variables to store the transaction or operations of 4 arrays
+        int ArrayProduct[] = new int[endCount];
+        int ArraySum[] = new int[endCount];
+        int ArrayDifference[] = new int[endCount];
 
+        //Looping construct for finding the product of elements in the array
+        //ASSUMPTION: both the arrays lengths should same
+        logger.trace("Performing addition, subtraction or multiplication operation on Linear Arrays if specified, else performing all three operations. ");
 
+        for(int indexOfArray = startCount; indexOfArray < endCount; indexOfArray++ ){
 
+            String arrayOperation = inputTransactionFileVariables.get("ArrayOperation");
+            logger.info("Operation specified : [ " + arrayOperation + " ] hence performing [ " + arrayOperation + " ] operation...");
+            int[] ElementOfArray = new int[arrayCount];
+            int innerIndex2_EndCount = ElementOfArray.length;
+            int productOfElements = 1;
+            int sumOfElements = 0;
+            int differenceOfElements = 0;
 
+            switch(arrayOperation)
+            {
+                case "Addition" :
+                    for(int innerIndexOfArray = startCount; innerIndexOfArray < arrayCount; innerIndexOfArray++){
+                        ElementOfArray[innerIndexOfArray] = (int)arrayNameValueList.get(arrayNamesArray[innerIndexOfArray])[indexOfArray] ;
+                        logger.info("Element value of " + arrayNamesArray[innerIndexOfArray] + " in the position [ " + indexOfArray + " ] = " +ElementOfArray[innerIndexOfArray] );
+                    }
 
+                    for (int innerIndex2 = startCount; innerIndex2 < innerIndex2_EndCount; innerIndex2++)
+                    {
+                        sumOfElements += ElementOfArray[innerIndex2];
+                    }
+                    ArraySum[indexOfArray] = sumOfElements;
+
+                    logger.info("Sum value at position [ " + indexOfArray + " ] = " + ArraySum[indexOfArray]);
+                    break;
+
+                case "Subtraction" :
+                    for(int innerIndexOfArray = startCount; innerIndexOfArray < arrayCount; innerIndexOfArray++){
+                        ElementOfArray[innerIndexOfArray] = (int)arrayNameValueList.get(arrayNamesArray[innerIndexOfArray])[indexOfArray] ;
+                        logger.info("Element value of " + arrayNamesArray[innerIndexOfArray] + " in the position [ " + indexOfArray + " ] = " +ElementOfArray[innerIndexOfArray] );
+                    }
+
+                    for (int innerIndex2 = startCount; innerIndex2 < innerIndex2_EndCount; innerIndex2++)
+                    {
+                        differenceOfElements -= ElementOfArray[innerIndex2];
+                    }
+                    ArrayDifference[indexOfArray] = differenceOfElements;
+
+                    logger.info("Difference value at position [ " + indexOfArray + " ] = " + ArrayDifference[indexOfArray]);
+                    break;
+
+                case "Multiplication" :
+                    for(int innerIndexOfArray = startCount; innerIndexOfArray < arrayCount; innerIndexOfArray++){
+                        ElementOfArray[innerIndexOfArray] = (int)arrayNameValueList.get(arrayNamesArray[innerIndexOfArray])[indexOfArray] ;
+                        logger.info("Element value of " + arrayNamesArray[innerIndexOfArray] + " in the position [ " + indexOfArray + " ] = " +ElementOfArray[innerIndexOfArray] );
+                    }
+
+                    for (int innerIndex2 = startCount; innerIndex2 < innerIndex2_EndCount; innerIndex2++)
+                    {
+                        productOfElements *= ElementOfArray[innerIndex2];
+                    }
+                    ArrayProduct[indexOfArray] = productOfElements;
+
+                    logger.info("Product value at position [ " + indexOfArray + " ] = " + ArrayProduct[indexOfArray]);
+                    break;
+
+                case "All" :
+                    for(int innerIndexOfArray = startCount; innerIndexOfArray < arrayCount; innerIndexOfArray++){
+                        ElementOfArray[innerIndexOfArray] = (int)arrayNameValueList.get(arrayNamesArray[innerIndexOfArray])[indexOfArray] ;
+                        logger.info("Element value of " + arrayNamesArray[innerIndexOfArray] + " in the position [ " + indexOfArray + " ] = " +ElementOfArray[innerIndexOfArray] );
+                    }
+
+                    for (int innerIndex2 = startCount; innerIndex2 < innerIndex2_EndCount; innerIndex2++)
+                    {
+                        productOfElements *= ElementOfArray[innerIndex2];
+                        sumOfElements += ElementOfArray[innerIndex2];
+                        differenceOfElements -= ElementOfArray[innerIndex2];
+                    }
+
+                    ArrayProduct[indexOfArray] = productOfElements;
+                    ArraySum[indexOfArray] = sumOfElements;
+                    ArrayDifference[indexOfArray] = differenceOfElements;
+
+                    logger.info("Product value at position [ " + indexOfArray + " ] = " + ArrayProduct[indexOfArray]);
+                    logger.info("Sum value at position [ " + indexOfArray + " ] = " + ArraySum[indexOfArray]);
+                    logger.info("Difference value at position [ " + indexOfArray + " ] = " + ArrayDifference[indexOfArray]);
+                    break;
+
+                default :
+                    logger.error("Invalid Operation specified, hence exiting!!!");
+                    System.exit(-3);
+            }
+        }
     }
 }
-
-
-
