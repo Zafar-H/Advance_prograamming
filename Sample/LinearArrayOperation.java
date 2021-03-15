@@ -115,7 +115,7 @@ public class LinearArrayOperation
         //Validation check for the files passed as argument
         //validations for system.dat file
         //check if specified file exists or not
-        logger.trace("Validation check for the files passed used...");
+        logger.trace("Validation check for the files used...");
         logger.trace("Validation check for system.dat file...");
         logger.trace("Checking if specified file exists or not...");
         if (!argumentSystemFile.exists()){
