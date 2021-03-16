@@ -1,12 +1,12 @@
 {
 	"Arrays" : {
+		"_comment" : "comment",
 		"firstArray" : [1,2,4,5],
-		"_comment" : "This is comment",
 		"secondArray" : [-3,4,5,6],
 		"thirdArray" : [2,3,4,5],
 		"fourthArray" : [34,56,67,7],
 		"fifthArray" : [1,2,3,4]
 	},
-	"@ArrayOperation" : "All"
+	"ArrayOperation" : "All"
 	
 }
