@@ -10,10 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class LinearArrayOperation_L2 {
     public static final Logger logger = LogManager.getLogger( LinearArrayOperation_L2.class );
@@ -251,42 +248,6 @@ public class LinearArrayOperation_L2 {
         logger.trace( "end position of array is specified" );
         logger.info( "End position : [ " + endCount + " ] " );
 
-        //The length of array is computed dynamically
-        logger.trace( "The length of array is computed dynamically..." );
-        int[] arrayElementCount = new int[arrayCount];
-        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++) {
-            arrayElementCount[indexOfArray] = endCount;
-        }
-        logger.trace( "Checking if the arrays are of same length otherwise exit..." );
-        logger.trace( "Checking if the initial position of the arrays are within the array size..." );
-        logger.trace( "Checking if the end position of the arrays are within the array size..." );
-
-        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++) {
-            //Checking if the arrays are of same length otherwise exit
-            if (indexOfArray != arrayCount - 1)
-                if (arrayElementCount[indexOfArray] != arrayElementCount[indexOfArray + 1]) {
-                    logger.error( "The array lengths are different and hence exiting" );
-                    System.exit( -1 );
-                }
-            //checking if the initial position of the arrays are within the array size
-            if (startCount > arrayElementCount[indexOfArray]) {
-                logger.info( "Array initial position ->[" + startCount + "] is greater than or equal the size of the array ->[" + arrayElementCount[indexOfArray] );
-                System.exit( -300 );
-            }
-            //checking if the end position of the arrays are within the array size
-            if (endCount > arrayElementCount[indexOfArray]) {
-                logger.info( "Array end position ->[" + endCount + "] is greater than or equal the size of the array ->[" + arrayElementCount[indexOfArray] );
-                System.exit( -301 );
-            }
-        }
-        logger.trace( "Arrays are of same length" );
-        logger.trace( "Initial position of the arrays are within the array size" );
-        logger.trace( "End position of the arrays are within the array size" );
-
-        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++) {
-            logger.info( "ElementCount of Array " + (indexOfArray + 1) + " = [" + arrayElementCount[indexOfArray] + "]" );
-        }
-
         //validations for transaction.dat file
         //check if specified file exists or not
         logger.trace( "***********************************************************" );
@@ -336,12 +297,19 @@ public class LinearArrayOperation_L2 {
         Object programTransactionFile = parser.parse( new FileReader( argumentTransactionFile ) );
         JSONObject jsonObject2 = (JSONObject) programTransactionFile;
 
+        //HashMap<String, String> transactionFileValues1 = new HashMap<String, String>();
+        //HashMap<String, String> arrayNameValues1 = new HashMap<String, String>();
+
+
         ArrayList <AbstractMap.SimpleEntry <String, String>> transactionFileValues = new ArrayList <AbstractMap.SimpleEntry <String, String>>();
         ArrayList <AbstractMap.SimpleEntry <String, Integer[]>> arrayNameValues = new ArrayList <AbstractMap.SimpleEntry <String, Integer[]>>();
         Set <String> transactionKeys = jsonObject2.keySet();
         //checking for comment keys...
+        logger.trace( "Printing input variables and their values... " );
         for (String key : transactionKeys) {
             if (!key.startsWith( underscoreDelimiter )) {
+                //transactionFileValues1.put(key, jsonObject2.get(key).toString());
+
                 transactionFileValues.add( new AbstractMap.SimpleEntry( key, jsonObject2.get( key ) ) );
             }
             else {
@@ -353,10 +321,7 @@ public class LinearArrayOperation_L2 {
                 System.exit( -404 );
             }
 
-
             //printing all the key value pairs
-            logger.trace( "The input variables and values are : " );
-
             if(key.matches( "Arrays" ) ){
                 Object arrayNameValuePair = jsonObject2.get(key);
                 JSONObject jsonObject3 = (JSONObject) arrayNameValuePair;
@@ -366,6 +331,9 @@ public class LinearArrayOperation_L2 {
                 for (String arrayName : arrayNames)
                 {
                     if (!arrayName.startsWith( underscoreDelimiter )) {
+                        //arrayNameValues1.put(arrayName, jsonObject3.get(arrayName).toString());
+                        logger.info("$$$$$$$$$$$$$$$$$$4" +jsonObject3.get(arrayName));
+
                         arrayNameValues.add( new AbstractMap.SimpleEntry( arrayName, jsonObject3.get(arrayName) ) );
                     }
                     else{
@@ -378,7 +346,10 @@ public class LinearArrayOperation_L2 {
                 }
             }
         }
+
+
         for (int indexOfArray = 0; indexOfArray < transactionFileValues.size(); indexOfArray++) {
+
             AbstractMap.SimpleEntry <String, String> map1 = transactionFileValues.get( indexOfArray );
 
             if ((map1.getKey()).matches("Arrays")) {
@@ -387,18 +358,69 @@ public class LinearArrayOperation_L2 {
                 {
                     AbstractMap.SimpleEntry <String, Integer[]> map2 = arrayNameValues.get( innerIndexOfArray );
                     logger.info( "Array Name : [ " + map2.getKey()+ " ] Value : " +map2.getValue());
+                    /*JSONArray getArray = arrayNameValues.getJSONArray("JArray1");
+                    JSONArray array = new JSONArray();
+                    array.add(map2.getValue());
+                    int fEle = getArray.getJSONObject(array);*/
                 }
             }
             else
             {
                 logger.info( "key : [ " + map1.getKey() + " ] " + map1.getValue() + " ] ");
             }
-
-
         }
 
+        //++++++++++++++++++++++++++++++++++++++++++++++++++
+        logger.trace("++++++++++++++++++++++++++++++++++++++++++++++++++");
+        /*HashMap<String, String> map11 = new HashMap<String, String>();
+        for(Map.Entry mapElement : transactionFileValues1.entrySet()){
+            String collectionKey = (String)mapElement.getKey();
+            String collectionValue = (String)mapElement.getValue();
+            logger.trace(" Key : [ " + collectionKey + " ] " + " Value : [ " + collectionValue + " ] ");
+        }*/
+        logger.trace("++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-        
+
+        //The length of array is computed dynamically
+        logger.trace( "The length of array is computed dynamically..." );
+
+
+        int[] expectedArrayElementCount = new int[arrayCount];
+        int[] arrayElementCount = new int[arrayNameValues.size()];
+        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++) {
+            expectedArrayElementCount[indexOfArray] = endCount;
+
+        }
+        logger.trace( "Checking if the arrays are of same length otherwise exit..." );
+        logger.trace( "Checking if the initial position of the arrays are within the array size..." );
+        logger.trace( "Checking if the end position of the arrays are within the array size..." );
+
+        for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++) {
+            //Checking if the arrays are of same length otherwise exit
+            if (indexOfArray != arrayCount - 1)
+                if (expectedArrayElementCount[indexOfArray] != expectedArrayElementCount[indexOfArray + 1]) {
+                    logger.error( "The array lengths are different and hence exiting" );
+                    System.exit( -1 );
+                }
+            //checking if the initial position of the arrays are within the array size
+            if (startCount > expectedArrayElementCount[indexOfArray]) {
+                logger.info( "Array initial position ->[" + startCount + "] is greater than or equal the size of the array ->[" + arrayElementCount[indexOfArray] );
+                System.exit( -300 );
+            }
+            //checking if the end position of the arrays are within the array size
+            if (endCount > expectedArrayElementCount[indexOfArray]) {
+                logger.info( "Array end position ->[" + endCount + "] is greater than or equal the size of the array ->[" + arrayElementCount[indexOfArray] );
+                System.exit( -301 );
+            }
+        }
+        logger.trace( "Arrays are of same length" );
+        logger.trace( "Initial position of the arrays are within the array size." );
+        logger.trace( "End position of the arrays are within the array size." );
+
+        /*for (int indexOfArray = startCount; indexOfArray < arrayCount; indexOfArray++) {
+            logger.info( "ElementCount of Array " + (indexOfArray + 1) + " = [" + arrayElementCount[indexOfArray] + "]" );
+        }*/
+
 
 
 
