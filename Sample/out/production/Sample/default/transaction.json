@@ -7,6 +7,6 @@
 		"fourthArray" : [34,56,67,7],
 		"fifthArray" : [1,2,3,4]
 	},
-	"ArrayOperation" : "All"
+	"ArrayOperation" : "Addition"
 	
 }

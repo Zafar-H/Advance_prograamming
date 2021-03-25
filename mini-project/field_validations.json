@@ -1,0 +1,70 @@
+{
+	"firstName" : { 
+		"rules" : {
+			"r.01" : { 
+				"notEmpty" : true, 
+				"error_code" : [ "firstName.100.01", "..." ], 
+				"help_code" : [ "firstName.100.01", "..." ] 
+			},
+			"r.02" : { 
+				"isAlphabetic" : true, 
+				"error_code" : [ "firstName.100.02", "..." ], 
+				"help_code" : [ "firstName.100.02", "..." ] 
+			},
+			"r.03" : { 
+				"minimumLength" : "5", 
+				"error_code" : [ "firstName.100.03", "..." ], 
+				"help_code" : [ "firstName.100.03", "..." ] 
+			},
+			"r.04" : { 
+				"maximumLength" : "10", 
+				"error_code" : [ "firstName.100.04", "..." ], 
+				"help_code" : [ "firstName.100.04", "..." ] 
+			}
+		},
+		"display" : {
+			"type" : "text",
+			"minimumLength" : "5",
+			"maximumLength" : "10",
+			"placeHolder" : "enter the name"
+		}
+	},
+	"mobileNumber" : {
+		"rules" : {
+			"r.05" : { 
+				"notEmpty" : true, 
+				"error_code" : "mobileNumber.100.01", 
+				"help_code" : "mobileNumber.100.01"
+			},
+			"r.06" : { 
+				"isNumeric" : true, 
+				"error_code" : "mobileNumber.100.02", 
+				"help_code" : "mobileNumber.100.02"
+			},
+			"r.07" : { 
+				"length" : "10", 
+				"error_code" : "mobileNumber.100.03", 
+				"help_code" : "mobileNumber.100.03"
+			},
+		},
+		"display" : {
+			"type" : "string",
+			"length" : "10",
+			"placeHolder" : "enter the mobile number"
+		}
+	},
+	"email" : {
+		"rules" : {
+			"r.08" : { 
+				"containsExpectedFormat" : true, 
+				"error_code" : [ "email.100.01", "..." ], 
+				"help_code" : [ "email.100.01", "..." ]
+			}
+		},
+		"display" : {
+			"type" : "email",
+			"placeHolder" : "enter the email id"
+		}
+	}
+}
+

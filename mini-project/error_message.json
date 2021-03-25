@@ -1,0 +1,34 @@
+{
+		"firstName.100.01" : { 
+			"system" : "Name should not be empty",
+			"user" : "Name field should not be empty"
+		},
+		"firstName.100.02" : { 
+			"system" : "Name should only contain alphabets",
+			"user": ""
+		},
+		"firstName.100.03" : { 
+			"system" : "minimum __minimumLength__ characters required",
+			"user" : ""
+		},
+		"firstName.100.04" : {
+			"system" : "maximum __maximumLength__ characters required",
+			"user" : ""
+		},
+		"mobileNumber.100.01" : { 
+			"system" : "Mobile number should not be null",
+			"user" : ""
+		},
+		"mobileNumber.100.02" : { 
+			"system" : "Mobile number should only contain numeric values",
+			"user" : ""
+		},
+		"mobileNumber.100.03" : {
+			"system" : "Length of the mobile number should be __length__",
+			"user" : ""
+		},
+		"email.100.01" : {
+			"system" : "Email id should be in __email_format__ format",
+			"user" : ""
+		}
+}

@@ -1,0 +1,51 @@
+*Writing validation engine
+
+-validation_rule.json which contains validation rule which will be given as input
+-validation_error.json which will have error code or message for each rule 
+
+-dynamically pattern should be executed against input key value pair
+
+-should give mandatory data check
+
+-two types of error should be there
+	-for users
+	-system logs which can be created dynamically
+
+-in code we need to set errors which are
+	-static while reading
+	-while running the pgm if we want we can take dynamic values which will be set up initially
+
+-should have substitution string 
+	-ex: __firstName__ which can be substituted when page value comes
+
+-Do simple validation routine [ json file ]
+	-call it asend point
+	-JSON object should be passed and responnse should also be the same
+	-file is passed as reference not argument
+
+-Defining JSON error framework
+	-read key value pair
+	-value is two attribute
+		-system message
+		-user defined message [UDF]
+			-each UDF can have substitution keys which shall be overriden by the data
+			 that comes as input.
+
+-program should be purely object oriented
+
+-input file can be XML file or JSON doc or JSON object
+
+-Should create exceptions like 
+	-attribute not found exception
+	-substitution string not found exception
+
+******************************************************
+
+-Validation Engine
+-Error Engine
+-Help Engine
+-All data driven to be done
+-It can be any data feed
+	-Flat file, XML, JSON(Directory, Database)
+
+

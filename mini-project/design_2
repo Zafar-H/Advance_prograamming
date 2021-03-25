@@ -1,0 +1,233 @@
+------------------ form_field.json --------------------
+{
+  "formField" : ['firstName', 'mobileNumber', 'email']
+}
+
+collection level validation
+-Check if form key is present or not
+-Check for comments
+-check if the value for formField key is prsent or not else exit.
+
+------------------ field_input.json  ---------------------
+{
+	form : {
+		firstName : ‘ ‘,
+		mobileNumber : ‘ ‘,
+		email : ‘ ‘
+	}
+}
+
+
+collection level validations
+-Check if form key is present or not
+-Check for comments
+-check if the value for form key is prsent or not else exit.
+-check if Form contains all the formField is present or not else exit.
+-
+
+
+
+------------------ default_field_validations.json ----------------------
+{
+	firstName : { 
+		rules : {
+			r.01 : { 
+				notEmpty : true, 
+				error_code : [ firstName.100.01, ... ], 
+				help_code : [ firstName.100.01, ... ] 
+			},
+			r.02 : { isAlphabetic : true, error_code : [ firstName.100.02, ... ], help_code : [ firstName.100.02, ... ] },
+			r.03 : { minimumLength : '1', error_code : [ firstName.100.03, ... ], help_code : [ firstName.100.03, ... ] },
+			r.04 : { maximumLength : '5', error_code : [ firstName.100.04, ... ], help_code : [ firstName.100.04, ... ] },
+			},
+		display : {
+			type : text,
+			minimumLength : '1',
+			maximumLength : '5',
+			placeHolder : 'enter the name'
+		}
+	},
+	mobileNumber : {
+		rules : {
+			r.01 : { notEmpty : true, error_code : mobileNumber.100.01, help_code : mobileNumber.100.01},
+			r.02 : { isNumeric : true, error_code : mobileNumber.100.02, help_code : mobileNumber.100.02},
+			r.03 : { length : '10', error_code : mobileNumber.100.03, help_code : mobileNumber.100.03},
+		},
+		display : {
+			type : number,
+			length : '10',
+			placeHolder : 'enter the mobile number'
+		}
+	},
+	email : {
+		rules : {
+			r.01 : { containsExpectedFormat : true, error_code : [ email.100.01, ... ], help_code : [ email.100.01, ... ]}
+		},
+		display : {
+			type : email,
+			placeHolder : 'enter the email id'
+		}
+	}
+}
+
+
+-------------------- field_validations.json -----------------------
+{
+	firstName : { 
+		rules : {
+			r.01 : { notEmpty : true, error_code : [ firstName.100.01, firstName.200.01 ], help_code : [ firstName.100.01, ... ] },
+			r.02 : { isAlphabetic : true, error_code : [ firstName.100.02, ... ], help_code : [ firstName.100.02, ... ] },
+			r.03 : { minimumLength : '5', error_code : [ firstName.100.03, ... ], help_code : [ firstName.100.03, ... ] },
+			r.04 : { maximumLength : '10', error_code : [ firstName.100.04, ... ], help_code : [ firstName.100.04, ... ] },
+			},
+		display : {
+			type : text,
+			minimumLength : '5',
+			maximumLength : '10'
+			placeHolder : 'enter the name'
+		}
+	},
+	mobileNumber : {
+		rules : {
+			r.01 : { notEmpty : true, error_code : mobileNumber.100.01, help_code : mobileNumber.100.01},
+			r.02 : { isNumeric : true, error_code : mobileNumber.100.02, help_code : mobileNumber.100.02},
+			r.03 : { length : '10', error_code : mobileNumber.100.03, help_code : mobileNumber.100.03},
+		},
+		display : {
+			type : string,
+			length : '10',
+			placeHolder : 'enter the mobile number'
+		}
+	},
+	email : {
+		rules : {
+			r.01 : { containsExpectedFormat : true, error_code : [ email.100.01, ... ], help_code : [ email.100.01, ... ]}
+		},
+		display : {
+			type : email,
+			placeHolder : 'enter the email id'
+		}
+	}
+}
+
+
+----------------------------- error_message.json ---------------
+{
+	"firstName" : {
+		"firstName.100.01" : { 
+			system : "Name should not be empty",
+			user : "Name field should not be empty"
+		},
+		"firstName.100.02" : { 
+			system : "Name should only contain alphabets",
+			user: ""
+		},
+		"firstName.100.03" : { 
+			system : "minimum __minimumLength__ characters required",
+			user : ""
+		},
+		"firstName.100.04" : {
+			system : "maximum __maximumLength__ characters required",
+			user : ""
+		}
+	},
+	"mobileNumber" : {
+		"mobileNumber.100.01" : { 
+			system : "Mobile number should not be null",
+			user : ""
+		},
+		"mobileNumber.100.02" : { 
+			system : "Mobile number should only contain numeric values",
+			user : ""
+		},
+		"mobileNumber.100.03" : {
+			system : "Length of the mobile number should be __length__",
+			user : ""
+		}
+	},
+	"email" : {
+		"email.100.01" : {
+			system : "Email id should be in __email_format__ format",
+			user : ""
+		}
+	}
+}
+
+---------------------- error_message_substitute.json ---------------
+{
+	"firstName" : {
+		"firstName.100.03" : {
+			"keywords" : "__minimumLength__",
+			"defaultValue" : "1"
+		},
+		"firstName.100.04" : {
+			"keywords" : "__maximumLength__",
+			"defaultValue" : "5"
+		},
+	}
+	"mobileNumber" : {
+		"mobileNumber.100.03" : {
+			"keywords" : "__length__",
+			"defaultValue" : "10"
+		}
+	},
+	"email" : {
+		"email.100.01" : {
+			"keywords" : "__email_format__",
+			"defaultValue" : "10"
+		}
+	}
+}
+
+
+----------------------- help.json ---------------------
+{
+	"fristName" : {
+		"100" : {
+			"01" : "",
+			"02" : "",
+			"03" : "",
+			"04" : ""
+			},
+		"200" : {
+			"01" : "",
+			"02" : "",
+			"03" : ""
+			}
+		},
+	"mobileNumber" : {
+		"100" : {
+			"01" : "",
+			"02" : "",
+			"03" : ""
+			},
+		"200" : {
+			"01" : "",
+			"02" : "",
+			"03" : ""
+			}
+		},
+	"email" : {
+		"100" : {
+			"01" : ""
+			},
+		"200" : {
+			"01" : ""
+			}
+		}
+}
+
+
+**************************************************************
+
+
+Node<String> nod1 = tree.getRoot();
+        Node<String> nod11 = tree.addNode(nod1, "firstName");
+            Node<String> nod21 = tree.addNode(nod11, "rules");
+                Node<String> nod211 = tree.addNode(nod21, "r.01");
+                    Node<String> nod2111 = tree.addNode(nod211, "notEmpty");
+                        Node<String> nod21111 = tree.addNode(nod2111, "true");
+
+
+
+

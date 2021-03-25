@@ -1,0 +1,276 @@
+Files required
+
+field_input.json
+field_validations.json
+user_errors.json
+
+field_input.json 
+{
+	form1 : {
+		name : ‘ ‘,
+		mobileNumber : ‘ ‘,
+		email : ‘ ‘
+	}
+}
+
+field_input.json 
+{
+	form1 : {
+		firstName : ‘ ‘,
+		mobileNumber : ‘ ‘,
+		email : ‘ ‘
+	}
+}
+
+**************************************
+
+default_field_validations.json
+{
+	firstName : { 
+		rules : {
+			r.01 : { notEmpty : true, error_code : [ firstName.100.01, ... ], help_code : [ firstName.100.01, ... ] },
+			r.02 : { isAlphabetic : true, error_code : [ firstName.100.02, ... ], help_code : [ firstName.100.02, ... ] },
+			r.03 : { minimumLength : '1', error_code : [ firstName.100.03, ... ], help_code : [ firstName.100.03, ... ] },
+			r.04 : { maximumLength : '5', error_code : [ firstName.100.04, ... ], help_code : [ firstName.100.04, ... ] },
+			},
+		display : {
+			type : text,
+			minimumLength : '1',
+			maximumLength : '5',
+			placeHolder : 'enter the name'
+		}
+	},
+	mobileNumber : {
+		rules : {
+			r.05 : { notEmpty : true, error_code : mobileNumber.100.01, help_code : mobileNumber.100.01},
+			r.06 : { isNumeric : true, error_code : mobileNumber.100.02, help_code : mobileNumber.100.02},
+			r.07 : { length : '10', error_code : mobileNumber.100.03, help_code : mobileNumber.100.03},
+		},
+		display : {
+			type : number,
+			length : '10',
+			placeHolder : 'enter the mobile number'
+		}
+	},
+	email : {
+		rules : {
+			r.08 : { containsExpectedFormat : true, error_code : [ email.100.01, ... ], help_code : [ email.100.01, ... ]}
+		},
+		display : {
+			type : email,
+			placeHolder : 'enter the email id'
+		}
+	}
+}
+
+
+field_validations.json
+{
+	firstName : { 
+		rules : {
+			r.01 : { notEmpty : true, error_code : [ firstName.100.01, ... ], help_code : [ firstName.100.01, ... ] },
+			r.02 : { isAlphabetic : true, error_code : [ firstName.100.02, ... ], help_code : [ firstName.100.02, ... ] },
+			r.03 : { minimumLength : '5', error_code : [ firstName.100.03, ... ], help_code : [ firstName.100.03, ... ] },
+			r.04 : { maximumLength : '10', error_code : [ firstName.100.04, ... ], help_code : [ firstName.100.04, ... ] },
+			},
+		display : {
+			type : text,
+			minimumLength : '5',
+			maximumLength : '10'
+			placeHolder : 'enter the name'
+		}
+	},
+	mobileNumber : {
+		rules : {
+			r.05 : { notEmpty : true, error_code : mobileNumber.100.01, help_code : mobileNumber.100.01},
+			r.06 : { isNumeric : true, error_code : mobileNumber.100.02, help_code : mobileNumber.100.02},
+			r.07 : { length : '10', error_code : mobileNumber.100.03, help_code : mobileNumber.100.03},
+		},
+		display : {
+			type : string,
+			length : '10',
+			placeHolder : 'enter the mobile number'
+		}
+	},
+	email : {
+		rules : {
+			r.08 : { containsExpectedFormat : true, error_code : [ email.100.01, ... ], help_code : [ email.100.01, ... ]}
+		},
+		display : {
+			type : email,
+			placeHolder : 'enter the email id'
+		}
+	}
+}
+
+****************************************
+
+
+
+user_errors.json
+{
+	form1_error : {
+		name : {
+			isAlphabetic : ' The name " _name_ " should be alphabetic ',
+			notNull : ' name should not be null ',
+			minimumLength : ' minimum 1 character should be specified ' 
+		}
+		mobileNumber : {
+			isNumeric : ‘ Mobile number should be numeric ’,
+			notNull : ‘ name should not be null ‘,
+		}
+		email : {
+			containsExpectedFormat : ‘ email should be in "name@example.com" format ‘,
+		}
+	}
+}
+
+
+
+
+
+
+***************************************************************************
+
+input.json
+{
+	id:
+	name:
+	mobileNumber:
+	email:
+}
+
+validations.json
+{
+	mandatoryValues : [ 'id', 'name', 'mobileNumber' ], 
+	id: {
+		isUnique : 'true',
+		notNull : 'true'
+	},
+	name: {
+		isAlphabetic : 'true',
+		notNull : 'true',
+		minimumLength : 1
+	},
+	mobileNumber: {
+		isNumeric : 'true',
+		notNull :  'true',
+		minimumLength : 10
+	},
+	email: {
+		containsExpectedFormat : 'true'
+	}
+}
+
+validations_error.json --------------- type-1
+{
+	error_100 : ' id should be unique ',
+	error_101 : ' id should not be null ',
+	error_102 : ' name should be alphabetic ',
+	error_103 : ' name should not be null ',
+	error_104 : ' name should contain minimum one character ',
+	error_105 : ' mobile number should be numeric ',
+	error_106 : ' mobile number should not be null ',
+	error_107 : ' mobile number should contain 10 digits ',
+	error_108 : ' email should be in "name@example.com" format '
+}
+
+validations_error.json --------------- type-2
+{
+	error_1 : {
+		error_1_1 : ' id should be unique ',
+		error_1_2 : ' id should not be null '
+	},
+	error_2 : {
+		error_2_1 : ' name should be alphabetic '
+		error_2_2 : ' name should not be null '
+		error_2_3 : ' name should contain minimum one character '
+	},
+	error_3 : {
+		error_3_1 : ' mobile number should be numeric '
+		error_3_2 : ' mobile number should not be null '
+		error_3_3 : ' mobile number should contain 10 digits '
+	},
+	error_4 : {
+		error_4_1 : ' email should be in "name@example.com" format '
+	}
+}
+
+
+
+***********************************************************************
+
+input.json
+{
+	id:
+	name:
+	mobileNumber:
+	email:
+}
+
+validations.json
+{
+	mandatoryValues : {
+		idNotNull : true,
+		nameNotNull : true,
+		mobileNumberNotNull : true
+	}, 
+	id: {
+		isUnique : 'true',
+		notNull : 'true'
+	},
+	name: {
+		isAlphabetic : 'true',
+		notNull : 'true',
+		minimumLength : 1
+	},
+	mobileNumber: {
+		isNumeric : 'true',
+		notNull :  'true',
+		minimumLength : 10
+	},
+	email: {
+		containsExpectedFormat : 'true'
+	}
+}
+
+validations_error.json --------------- type-1
+{
+	error_100 : ' id should not be null ',
+	error_101 : ' name should not be null ',
+	error_102 : ' mobile number should not be null ',
+	error_103 : ' id should be unique ',
+	error_104 : ' name should be alphabetic ',
+	error_105 : ' name should contain minimum one character ',
+	error_106 : ' mobile number should be numeric ',
+	error_107 : ' mobile number should contain 10 digits ',
+	error_108 : ' email should be in "name@example.com" format '
+}
+
+validations_error.json --------------- type-2
+{
+	error_0 : {
+		error_0_1 : ' id should not be null ',
+		error_0_2 : ' name should not be null ',
+		error_0_3 : ' mobile number should not be null '
+	}
+	error_1 : {
+		error_1_1 : ' id should be unique '
+	},
+	error_2 : {
+		error_2_1 : ' name should be alphabetic ',
+		error_2_3 : ' name should contain minimum one character '
+	},
+	error_3 : {
+		error_3_1 : ' mobile number should be numeric ',
+		error_3_3 : ' mobile number should contain 10 digits '
+	},
+	error_4 : {
+		error_4_1 : ' email should be in "name@example.com" format '
+	}
+}
+
+help.json 
+{
+	
+}

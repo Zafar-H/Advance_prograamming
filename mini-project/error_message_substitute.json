@@ -1,0 +1,18 @@
+{
+		"firstName.100.03" : {
+			"keywords" : "__minimumLength__",
+			"defaultValue" : "1"
+		},
+		"firstName.100.04" : {
+			"keywords" : "__maximumLength__",
+			"defaultValue" : "5"
+		},
+		"mobileNumber.100.03" : {
+			"keywords" : "__length__",
+			"defaultValue" : "10"
+		},
+		"email.100.01" : {
+			"keywords" : "__email_format__",
+			"defaultValue" : "10"
+		}
+}
