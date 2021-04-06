@@ -1,10 +1,14 @@
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Tree<T> {
-    public static final Logger logger = LogManager.getLogger( LinearArrayOperation_L2.class );
+    public static final Logger logger = LogManager.getLogger( Tree.class );
 
     public static class Node<T>{
         private T value;
@@ -26,6 +30,7 @@ public class Tree<T> {
         }
     }
     private Node<T> root;
+    private String searchKey;
 
     public void addRoot(T value) {
         if (root == null) {
@@ -47,43 +52,47 @@ public class Tree<T> {
         }
     }
 
+
     public Node<T> getRoot() {
         return root;
     }
 
-    public static void main(String[] args)
-    {
-        Tree<String> tree = new Tree<>();
-        tree.addRoot("form");
+    public void displayTreeStructure(Node<T> current, String levelIdentifier) {
+        logger.info(levelIdentifier+ "" +current.getValue());
+        String key = current.getValue().toString();
+        levelIdentifier = levelIdentifier+ " -----> ";
+        String finalLevelIdentifier = levelIdentifier;
+        current.getChildren().forEach((n) -> displayTreeStructure(n, finalLevelIdentifier));
+    }
 
-        //logger.info(tree);
-        /*Node<String> nod1 = tree.getRoot();
-        Node<String> nod1_1 = tree.addNode(nod1, "firstName");
-            Node<String> nod1_1_1 = tree.addNode(nod11, "rules");
-                Node<String> nod1_1_1_1 = tree.addNode(nod21, "r.01");
-                    Node<String> nod1_1_1_1_1 = tree.addNode(nod211, "notEmpty");
-                        Node<String> nod1_1_1_1_1_1 = tree.addNode(nod2111, "true");
-                    Node<String> nod2111 = tree.addNode(nod211, "notEmpty");
-                        Node<String> nod21111 = tree.addNode(nod2111, "true");
-       *//* for (int i=0; i<level; i++) {
-            logger.info(nod1.getChildren().get(i).getValue());
-        }*//*
+    public void displayTreeStructure() {
+        displayTreeStructure(getRoot(), "");
+    }
 
-                Node<String> nod212 = tree.addNode(nod21, "r.02");
-                Node<String> nod213 = tree.addNode(nod21, "r.03");
-                Node<String> nod214 = tree.addNode(nod21, "r.04");*/
+    public String search(Node<T> current, String key) {
+        if(current.getChildren() != null)
+        {
+            for(Node<T> child : current.getChildren())
+            {
 
-        //Node<String> nod6 = tree.addNode(nod2, "display");
-
-       /* Node<String> nod3 = tree.addNode(nod1, "mobileNumber");
-        Node<String> nod4 = tree.addNode(nod1, "email");*/
-
-
-
-
-        for (int i=0; i<2; i++) {
-           // logger.info(nod1.getChildren().get(i).getValue());
+            }
         }
+        if(current.getValue().toString().equals(key))
+        {
+            return current.getValue().toString();
+        }
+        else
+            return "Not found!!!";
+    }
+
+    public String search(String key) {
+        //return key.getChildren().get(0).getValue();
+        return  search(getRoot(), key);
+    }
+
+    public static void main(String[] args) throws IOException, ParseException {
+
+
     }
 }
 

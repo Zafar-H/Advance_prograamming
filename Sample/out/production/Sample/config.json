@@ -1,0 +1,9 @@
+{
+	"PROJECT.SystemFile" : "/home/zafar/mini-project/system.json",
+	"PROJECT.TransactionFile" : {
+		"formFieldInputFile" : "/home/zafar/mini-project/field_input.json",
+		"formValidationsFile" : "/home/zafar/mini-project/field_validation.json",
+		"errorMessagesFile" : "/home/zafar/mini-project/error_message.json",
+		"errorMessagesSubstituteFile" : "/home/zafar/mini-project/error_message_substitute.json"
+	}	
+}

@@ -10,42 +10,47 @@ public class ValidationEngine {
 
     public static final Logger logger = LogManager.getLogger(ValidationEngine.class);
 
+    public static class ProjectFiles
+    {
+        public String PROJECTSystemFileName;
+        public String PROJECTDefaultsFilename;
+
+    }
+
     public static void main(String args[]) throws IOException, ParseException
     {
-        String formFieldFile = "/home/zafar/mini-project/form_field.json";
+        //ValidationEngine.ProjectFiles files = new ValidationEngine.ProjectFiles();
+        //files.PROJECTSystemFileName = "";
+        //Storing reference files in a variable
+        logger.trace("Storing reference files in a variable...");
+        String systemFile = "/home/zafar/mini-project/system.json";
         String fieldInputFile = "/home/zafar/mini-project/field_input.json";
-        String fieldValidationsFile = "/home/zafar/mini-project/default_field_validations.json";
+        String defaultValidationsFile = "/home/zafar/mini-project/default_field_validations.json";
+        String customValidationsFile = "/home/zafar/mini-project/custom_validations.json";
         String errorMessagesFile = "/home/zafar/mini-project/error_message.json";
         String errorMessagesSubstituteFile = "/home/zafar/mini-project/error_message_substitute.json";
-
-        //splitter constant literals
-        logger.trace( "Specifying delimiter for segregation..." );
-        String underscoreDelimiter = "_";
-        logger.info( "Delimiter used for comments : [ " + underscoreDelimiter + " ] " );
 
 
         //Checking whether default files are specified...
         logger.trace( "Checking whether default field validation file is specified..." );
-        if (fieldValidationsFile != null) {
+        if (defaultValidationsFile != null) {
             logger.trace( "Default field validation file is specified..." );
-            logger.info( "Default field validation file : [ " + fieldValidationsFile + " ] " );
+            logger.info( "Default field validation file : [ " + defaultValidationsFile + " ] " );
         } else {
             logger.error( "Exiting because default system file is not specified :(" );
             System.exit( -3 );
         }
 
-        //Checking whether argument is passed
-        //Finding the number of arguments
-        logger.trace( "Checking whether argument is passed..." );
-        logger.trace( "Finding the number of arguments..." );
-        int argumentLength = args.length;
-        int noArgument = 0;
-        logger.info( "Argument count : [ " + argumentLength + " ] " );
-
         //Specifying expected number of argument
         logger.trace( "Specifying expected number of argument..." );
         int maxNumberOfArgument = 1;
         logger.info( "Expected number of argument : [ " + maxNumberOfArgument + " ] " );
+
+        //Finding the number of arguments
+        logger.trace( "Finding the number of arguments passed..." );
+        int argumentLength = args.length;
+        logger.info( "Argument count : [ " + argumentLength + " ] " );
+
 
         //Specifying the position of expected arguments
         logger.trace( "Specifying the position of expected arguments..." );
@@ -55,40 +60,45 @@ public class ValidationEngine {
         //Get the number of arguments passed
         logger.trace( "Getting the number of arguments passed" );
         int numberOfArgument = argumentLength;
-        int numberOne = 1;
         logger.info( "Number of arguments passed : [ " + numberOfArgument + " ] " );
 
-        //If there are arguments more than expected, take the first and ignore the rest. Override args with default files
+        //If there are arguments more than expected, take the expected and ignore the rest. Override args with default files
         if (numberOfArgument >= maxNumberOfArgument) {
             logger.trace( "Overriding the default file with file passed as argument..." );
-            fieldValidationsFile = args[firstArgumentPosition];
-            logger.info( "Overridden argument files are : [ " + fieldValidationsFile +  " ] " );
+            defaultValidationsFile = args[firstArgumentPosition];
+            logger.info( "Overridden argument files are : [ " + defaultValidationsFile +  " ] " );
         }
 
 
         //Storing argument or default files in variable
         logger.trace( "Storing argument or default files in variable..." );
-        File programFormFieldFile = new File( formFieldFile );
+        File programSystemFile = new File( systemFile );
         File programFieldInputFile = new File( fieldInputFile );
-        File programFieldValidationsFile = new File( fieldValidationsFile );
+        File programDefaultValidationsFile = new File( defaultValidationsFile );
+        File programCustomValidationsFile = new File( customValidationsFile );
         File programErrorMessagesFile = new File( errorMessagesFile );
         File programErrorMessagesSubstituteFile = new File( errorMessagesSubstituteFile );
-        logger.info( "The form field file to be used in program is : [ " + programFormFieldFile + " ] " );
+        logger.info( "The form field file to be used in program is : [ " + programSystemFile + " ] " );
         logger.info( "The field input data file to be used in program is : [ " + programFieldInputFile + " ] " );
-        logger.info( "The field validation file to be used in program is : [ " + programFieldValidationsFile + " ] " );
+        logger.info( "The field validation file to be used in program is : [ " + programDefaultValidationsFile + " ] " );
+        logger.info( "The custom validation file to be used in program is : [ " + programCustomValidationsFile + " ] " );
         logger.info( "The error messages file to be used in program is : [ " + programErrorMessagesFile + " ] " );
         logger.info( "The error message substitution file to be used in program is : [ " + programErrorMessagesSubstituteFile + " ] " );
 
 
         //Validation check for the files to be used in program
+        logger.trace("Validation check for the files to be used in program...");
         //Validation check for form field file
-        validateFile(programFormFieldFile);
+        validateFile(programSystemFile);
 
         //Validation check for field input file
         validateFile(programFieldInputFile);
 
-        //Validation check for field validations file
-        validateFile(programFieldValidationsFile);
+        //Validation check for default field validations file
+        validateFile(programDefaultValidationsFile);
+
+        //Validation check for custom field validations file
+        validateFile(programCustomValidationsFile);
 
         //Validation check for error messages file
         validateFile(programErrorMessagesFile);
@@ -96,86 +106,83 @@ public class ValidationEngine {
         //Validation check for error messages substitute file
         validateFile(programErrorMessagesSubstituteFile);
 
-        //Calling a method to parse a json file and storing data as jsonObject
-        JSONObject fieldValidationsFileJsonObject = jsonObjectCreator(programFieldValidationsFile);
+        //Specifying initial level of keys for jason data
+        logger.trace("Specifying initial level of keys in jason data...");
+        int initialLevel = 0;
+        logger.info(" Initial level of keys in jason data is : [ " + initialLevel  + " ] ");
 
-        int nullCondition = 0;
-        int numberOfKeys = fieldValidationsFileJsonObject.keySet().size();
-        if (numberOfKeys != nullCondition)
-        {
-            for(Object levelOneKey : fieldValidationsFileJsonObject.keySet())
-            {
-                logger.info(" [ " +levelOneKey+ " ] ");
-                JSONObject levelTwoValues = jsonObjectCreator(fieldValidationsFileJsonObject.get(levelOneKey));
-                int levelTwoKeysSize = levelTwoValues.keySet().size();
-                if(levelTwoKeysSize != nullCondition)
-                {
-                    for(Object levelTwoKey : levelTwoValues.keySet()){
-                        logger.info(" >>>>>>> [ " +levelTwoKey+ " ] ");
-                        JSONObject levelThreeValues = jsonObjectCreator(levelTwoValues.get(levelTwoKey));
-                        int levelThreeKeysSize = levelThreeValues.keySet().size();
-                        if(levelThreeKeysSize != nullCondition)
-                        {
-                            for(Object levelThreeKey : levelThreeValues.keySet())
-                            {
-                                logger.info(" >>>>>>> >>>>>>> [ " +levelThreeKey+ " ] ");
-                                if(levelThreeValues.get(levelThreeKey) != null && levelThreeValues.get(levelThreeKey).getClass().getName() == "org.json.simple.JSONObject")
-                                {
-                                    JSONObject levelFourValues = jsonObjectCreator(levelThreeValues.get(levelThreeKey));
-                                    if(levelFourValues != null){
-                                        int levelFourKeysSize = levelFourValues.keySet().size();
-                                        if(levelFourKeysSize != nullCondition)
-                                        {
-                                            for(Object levelFourKey : levelFourValues.keySet())
-                                            {
-                                                logger.info(" >>>>>>> >>>>>>> >>>>>>> [ " +levelFourKey+ " ] ");
+        //Specifying tree structure for json files and adding root node to each of them
+        logger.trace("Specifying tree structure for json files and adding root node to each of them...");
 
-                                                if(levelFourValues.get(levelThreeKey) != null && levelFourValues.get(levelFourKey).getClass().getName() == "org.json.simple.JSONObject")
-                                                {
-                                                    JSONObject levelFiveValues = jsonObjectCreator(levelFourValues.get(levelThreeKey));
-                                                    if(levelFiveValues != null){
-                                                        int levelFiveKeysSize = levelFiveValues.keySet().size();
-                                                        if(levelFiveKeysSize != nullCondition)
-                                                        {
-                                                            for(Object levelFiveKey : levelFiveValues.keySet())
-                                                            {
-                                                                logger.info(" >>>>>>> >>>>>>> >>>>>>> >>>>>>> [ " +levelFiveKey+ " ] Value : [ " + levelFiveValues.get(levelFiveKey) + " ] ");
+        //Specifying tree structure for form field file and adding root to it
+        logger.trace("Specifying tree structure for form field file and adding root to it...");
+        Tree<String> systemFileDataTree = new Tree<>();
+        systemFileDataTree.addRoot(programSystemFile.getName());
+        Tree.Node<String> formFieldTreeRoot = systemFileDataTree.getRoot();
+        logger.trace("Tree Structure specified.");
+        logger.info("Root node for the form field file is : [ " + systemFileDataTree.getRoot().getValue()  + " ] ");
+        //Storing form field file data in tree structure
+        systemFileDataTree = treeCreation(programSystemFile, initialLevel, systemFileDataTree, formFieldTreeRoot);
+        systemFileDataTree.displayTreeStructure();
 
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    logger.info(" >>>>>>> >>>>>>> >>>>>>> >>>>>>> [ " + levelFourValues.get(levelFourKey) + " ] ");
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    logger.info(" >>>>>>> >>>>>>> >>>>>>> [ " + levelThreeValues.get(levelThreeKey) + " ] ");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //Specifying tree structure for form input field file and adding root to it
+        logger.trace("Specifying tree structure for form input field file and adding root to it...");
+        Tree<String> formFieldInputTree = new Tree<>();
+        formFieldInputTree.addRoot(programFieldInputFile.getName());
+        Tree.Node<String> formFieldInputTreeRoot = formFieldInputTree.getRoot();
+        logger.trace("Tree Structure specified.");
+        logger.info("Root for the form field file is : [ " + formFieldInputTree.getRoot().getValue()  + " ] ");
+        //Storing form field input file data in tree structure
+        formFieldInputTree = treeCreation(programFieldInputFile, initialLevel, formFieldInputTree, formFieldInputTreeRoot);
+        formFieldInputTree.displayTreeStructure();
 
+        //Specifying tree structure for default form field validation file and adding root to it
+        logger.trace("Specifying tree structure for default form field validation file and adding root to it...");
+        Tree<String> defaultValidationTree = new Tree<>();
+        defaultValidationTree.addRoot(programDefaultValidationsFile.getName());
+        Tree.Node<String> formFieldValidationTreeRoot = defaultValidationTree.getRoot();
+        logger.trace("Tree Structure specified.");
+        logger.info("Root for the default form field file is : [ " + defaultValidationTree.getRoot().getValue()  + " ] ");
+        //Storing default field validation file data in tree structure
+        defaultValidationTree = treeCreation(programDefaultValidationsFile, initialLevel, defaultValidationTree, formFieldValidationTreeRoot);
+        defaultValidationTree.displayTreeStructure();
 
+        //Specifying tree structure for form field validation file and adding root to it
+        logger.trace("Specifying tree structure for custom form field validation file and adding root to it...");
+        Tree<String> customValidationTree = new Tree<>();
+        customValidationTree.addRoot(programCustomValidationsFile.getName());
+        Tree.Node<String> customFormFieldValidationTreeRoot = customValidationTree.getRoot();
+        logger.trace("Tree Structure specified.");
+        logger.info("Root for the custom form field file is : [ " + customValidationTree.getRoot().getValue()  + " ] ");
+        //Storing custom field validation file data in tree structure
+        customValidationTree = treeCreation(programCustomValidationsFile, initialLevel, customValidationTree, customFormFieldValidationTreeRoot);
+        customValidationTree.displayTreeStructure();
 
+        //Specifying tree structure for error messages file and adding root to it
+        logger.trace("Specifying tree structure for error messages file and adding root to it...");
+        Tree<String> errorMessageTree = new Tree<>();
+        errorMessageTree.addRoot(programErrorMessagesFile.getName());
+        Tree.Node<String> errorMessageTreeRoot = errorMessageTree.getRoot();
+        logger.trace("Tree Structure specified.");
+        logger.info("Root for the form field file is : [ " + errorMessageTree.getRoot().getValue()  + " ] ");
+        //Storing error messages file data in tree structure
+        errorMessageTree = treeCreation(programErrorMessagesFile, initialLevel, errorMessageTree, errorMessageTreeRoot);
+        errorMessageTree.displayTreeStructure();
 
-
-
+        //Specifying tree structure for error messages substitute file and adding root to it
+        logger.trace("Specifying tree structure for error messages substitute file and adding root to it...");
+        Tree<String> errorMessageSubstituteTree = new Tree<>();
+        errorMessageSubstituteTree.addRoot(programErrorMessagesSubstituteFile.getName());
+        Tree.Node<String> errorMessageSubstituteTreeRoot = errorMessageSubstituteTree.getRoot();
+        logger.trace("Tree Structure specified.");
+        logger.info("Root for the form field file is : [ " + errorMessageSubstituteTree.getRoot().getValue()  + " ] ");
+        //Storing error messages substitute file data in tree structure
+        errorMessageSubstituteTree = treeCreation(programErrorMessagesSubstituteFile, initialLevel, errorMessageSubstituteTree, errorMessageSubstituteTreeRoot);
+        errorMessageSubstituteTree.displayTreeStructure();
     }
 
     //Method for file validation...
     static void validateFile(File file) {
-
-        //Delimiter used for comments
-        String underscoreDelimiter = "_";
 
         logger.trace( "Checking if file [ " + file + " ] exists or not..." );
         if (!file.exists()) {
@@ -233,6 +240,88 @@ public class ValidationEngine {
         JSONObject jsonObject = (JSONObject) parsedObject;
 
         return jsonObject;
+    }
+
+    static Tree<String> treeCreation(File file, int initialLevel, Tree<String> tree, Tree.Node<String> treeRoot) throws IOException, ParseException {
+        //Storing file data as jsonObject
+        logger.trace("Storing [ " + file + " ]'s data as jsonObject...");
+        JSONObject fileJsonObject = jsonObjectCreator(file);
+        //Obtaining number of keys present in first level of file
+        int levelOneKeysSizeOfFile = fileJsonObject.keySet().size();
+        logger.info("Number of keys present in first level of [ " + file + " ]'s data are : [ " + levelOneKeysSizeOfFile + " ] ");
+        //Storing file data in tree structure
+        logger.trace("Storing [ " + file + " ]'s data in tree structure...");
+        //createTree(fileJsonObject, levelOneKeysSizeOfFile, initialLevel);
+
+        Tree<String> treeValues = createTree(fileJsonObject, levelOneKeysSizeOfFile, initialLevel, tree, treeRoot);
+        //treeValues.traverseDepthFirst();
+
+        return treeValues;
+        //treeValues.traverseDepthFirst(treeValues.getRoot(), "");
+        //treeValues.traverseDepthFirst(treeValues.getRoot());
+        //logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!" +treeValues.getRoot().getChildren().get(0).getValue());
+    }
+
+    /*static void createTree(JSONObject jsonObject, int levelOneKeysSize, int initialLevel) throws IOException, ParseException {
+        String levelIdentifierSymbol = ">>>>";
+        String jsonObjectDataType = "org.json.simple.JSONObject";
+        int nullCondition = 0;
+        String levelIdentifier = "";
+        for(int i = 0; i < initialLevel; i++)
+        {
+            levelIdentifier = levelIdentifier + " " + levelIdentifierSymbol;
+        }
+        initialLevel++;
+        if(levelOneKeysSize != nullCondition)
+        {
+            for(Object Key : jsonObject.keySet())
+            {
+                logger.info( levelIdentifier + " " + Key);
+                if(jsonObject.get(Key) != null )
+                {
+                    if(jsonObject.get(Key).getClass().getName() == jsonObjectDataType)
+                    {
+                        JSONObject newJsonObject = jsonObjectCreator(jsonObject.get(Key));
+                        int newJsonObjectKeySize = newJsonObject.keySet().size();
+                        createTree(newJsonObject, newJsonObjectKeySize, initialLevel);
+                    }
+                    else
+                    {
+                        logger.info(levelIdentifier + " " +levelIdentifierSymbol+ " " +jsonObject.get(Key) );
+                    }
+                }
+            }
+        }
+    }*/
+
+
+    static Tree<String> createTree(JSONObject jsonObject, int levelOneKeysSize, int initialLevel, Tree<String> tree, Tree.Node<String> treeRoot) throws IOException, ParseException {
+        String jsonObjectDataType = "org.json.simple.JSONObject";
+        int nullCondition = 0;
+        initialLevel++;
+        if(levelOneKeysSize != nullCondition)
+        {
+            for(Object Key : jsonObject.keySet())
+            {
+                Tree.Node<String> node = tree.addNode(treeRoot, Key.toString());
+                if(jsonObject.get(Key) != null )
+                {
+                    if(jsonObject.get(Key).getClass().getName() == jsonObjectDataType)
+                    {
+                        JSONObject newJsonObject = jsonObjectCreator(jsonObject.get(Key));
+                        int newJsonObjectKeySize = newJsonObject.keySet().size();
+
+                        createTree(newJsonObject, newJsonObjectKeySize, initialLevel, tree, node);
+                    }
+                    else
+                    {
+                        Tree.Node<String> leafNode = tree.addNode(node, jsonObject.get(Key).toString());
+                    }
+                }
+            }
+        }
+
+        return tree;
     }
 }
 
